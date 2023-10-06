@@ -1,25 +1,29 @@
 package models;
 
-public class Geometry {
+public class NotePoint {
     private String type;
-    private float[][][][] coordinates;
+    private int[] coordinates;
 
-    public Geometry(){}
+    public NotePoint(){}
 
-    public Geometry(String type, float[][][][] coordinates) {
+    public NotePoint(String type, int[] coordinates) {
         this.type = type;
         this.coordinates = coordinates;
     }
+
     public String getType() {
         return type;
     }
+
     public void setType(String type) {
         this.type = type;
     }
-    public float[][][][] getCoordinates() {
+
+    public int[] getCoordinates() {
         return coordinates;
     }
-    public void setCoordinates(float[][][][] coordinates) {
+
+    public void setCoordinates(int[] coordinates) {
         this.coordinates = coordinates;
     }
 

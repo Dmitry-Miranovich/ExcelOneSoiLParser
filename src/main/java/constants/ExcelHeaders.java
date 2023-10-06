@@ -1,11 +1,12 @@
 package constants;
 
 public class ExcelHeaders{
-    public static String[] fieldsHeader = new String[]{"ID", "Название", "Площадь", "Культура", "Дата посева", "Дата сбора урожая", "Выходное значение","Единицы выходных значений", "Разнообразие культур", "Источник", "Создано","Обновлено", "ID сезона"};
-    public static String[] seasonHeader = new String[]{"ID", "Название", "Создано", "Обновлено"};
-    public static String[] notesHeader = new String[]{"ID", "Текст", "Создано", "Обновлено","Создание записки", "ID сезона",};
+    public static String[] fieldsHeader = new String[]{"ID п", "Название", "Площадь", "Культура", "Дата посева", "Дата сбора урожая", "Выходное значение","Единицы выходных значений", "Разнообразие культур", "Источник", "Создано","Обновлено", "ID сезона"};
+    public static String[] seasonHeader = new String[]{"ID с", "Название", "С", "По", "Email"};
+    public static String[] notesHeader = new String[]{"ID з","Тип", "Текст", "Создано", "Обновлено","Единицы на метр", "ID сезона","Код сезона"};
 
-    public static final String ONESOIL_FIELDS_OUTPUT = "D:/OneSoilPath/onesoil_fields.xlsx";
+    public static final String ONESOIL_FIELDS_OUTPUT = "D:/OneSoilPath/onesoil_fields.xls";
+    public static final String ONESOIL_FIELDS_OUTPUT_COORDINATES = "D:/OneSoilPath/onesoil_fields.zns";
 
     public static final int SHEET_ID_INDEX = 0;
     public static final int SHEET_TITLE_INDEX = 1;
@@ -25,6 +26,31 @@ public class ExcelHeaders{
     public static final int SEASON_SHEET_TITLE_INDEX = 1;
     public static final int SEASON_SHEET_CREATED_AT_INDEX = 2;
     public static final int SEASON_SHEET_UPDATED_AT_INDEX = 3;
+    public static final int SEASON_SHEET_EMAIL_INDEX = 4;
+
+     public static final int NOTE_SHEET_ID_INDEX = 0;
+     public static final int NOTE_SHEET_TYPE_INDEX = 1;
+     public static final int NOTE_SHEET_TEXT_INDEX = 2;
+     public static final int NOTE_SHEET_CREATED_AT_INDEX = 3;
+     public static final int NOTE_SHEET_UPDATED_AT_INDEX = 4;
+     public static final int NOTE_SHEET_UNITS_PER_METER_INDEX = 5;
+     public static final int NOTE_SHEET_SEASON_ID_INDEX = 6;
+     public static final int NOTE_SHEET_SHARING_CODE_INDEX = 7;
+    /*
+     * private int id;
+    private String uuid;
+    private String type;
+    private String text;
+    private Date created_at;
+    private Date update_at;
+    private NotePoint point;
+    private String units_per_meter;
+    private String color;
+    private int season_id;
+    private boolean is_deleted;
+    private String field_user_season_uuid;
+    private String sharing_code;
+     */
 
     public static final String SHEET_FIELD_NAME = "Поля";
     public static final String SHEET_SEASONS_NAME = "Сезоны";

@@ -7,6 +7,7 @@ public class Season {
     public String title;
     public Date start_date;
     public Date end_date;
+    public String email;
 
     public Season(){}
 
@@ -15,6 +16,15 @@ public class Season {
         this.title = title;
         this.start_date = start_date;
         this.end_date = end_date;
+    }
+    
+
+    public Season(int id, String title, Date start_date, Date end_date, String email) {
+        this.id = id;
+        this.title = title;
+        this.start_date = start_date;
+        this.end_date = end_date;
+        this.email = email;
     }
 
     public int getId() {
@@ -49,5 +59,12 @@ public class Season {
         this.end_date = end_date;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
     
 }
