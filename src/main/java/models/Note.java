@@ -17,6 +17,7 @@ public class Note {
     private boolean is_deleted;
     private String field_user_season_uuid;
     private String sharing_code;
+    private String fieldTitle;
 
     
 
@@ -151,6 +152,14 @@ public class Note {
 
     public void setNoted_at(Date noted_at) {
         this.noted_at = noted_at;
+    }
+
+    public String getFieldTitle() {
+        return fieldTitle;
+    }
+
+    public void setFieldTitle(String fieldTitle) {
+        this.fieldTitle = fieldTitle;
     }
 
     

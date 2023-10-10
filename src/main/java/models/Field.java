@@ -13,6 +13,8 @@ public class Field {
     private LastNDVI last_ndvi;
     private Avg avg;
     private Std std;
+    private float[][] realCoordinates;
+    private int seasonID;
 
     public Field(){}
 
@@ -103,6 +105,31 @@ public class Field {
     public void setStd(Std std) {
         this.std = std;
     }
+
+    public float[][] getRealCoordinates() {
+        return realCoordinates;
+    }
+
+    public void setRealCoordinates(float[][] realCoordinates) {
+        this.realCoordinates = realCoordinates;
+    }
+
+    public Geometry getGeometry() {
+        return geometry;
+    }
+
+    public void setGeometry(Geometry geometry) {
+        this.geometry = geometry;
+    }
+
+    public int getSeasonID() {
+        return seasonID;
+    }
+
+    public void setSeasonID(int seasonID) {
+        this.seasonID = seasonID;
+    }
+
     
     
 }

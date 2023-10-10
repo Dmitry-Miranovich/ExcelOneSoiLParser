@@ -7,6 +7,8 @@ public class ExcelHeaders{
 
     public static final String ONESOIL_FIELDS_OUTPUT = "D:/OneSoilPath/onesoil_fields.xls";
     public static final String ONESOIL_FIELDS_OUTPUT_COORDINATES = "D:/OneSoilPath/onesoil_fields.zns";
+    public static final String ONESOIL_FIELDS_OUTPUT_KML = "D:/OneSoilPath/onesoil_fields.kml";
+    public static final String ONESOIL_FIELDS_OUTPUT_TXT = "D:/OneSoilPath/onesoil_fields.txt";
 
     public static final int SHEET_ID_INDEX = 0;
     public static final int SHEET_TITLE_INDEX = 1;

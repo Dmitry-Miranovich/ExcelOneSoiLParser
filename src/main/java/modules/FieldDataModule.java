@@ -6,7 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import models.FieldReaderResponse;
 import models.Note;
+import models.Field;
 import models.NoteResponse;
+import models.Season;
 import models.SeasonResponse;
 
 import java.net.URI;
@@ -14,9 +16,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,52 +46,55 @@ public class FieldDataModule {
         this.excelBook = excelBook;
     }
 
-    public ArrayList<FieldReaderResponse> sampleConnection(String url, String token) {
+    public ArrayList<FieldReaderResponse> sampleConnection(SeasonResponse collectedSeason, String url, String token)
+            throws InterruptedException {
         String formattedToken = String.format("Token %s", token);
         ArrayList<FieldReaderResponse> responses = new ArrayList<>();
-        try {
-            URI seasonURI = new URI(url);
-            URL seasonURL = seasonURI.toURL();
-            HttpsURLConnection connection = (HttpsURLConnection) seasonURL.openConnection();
-            connection.addRequestProperty("Authorization", formattedToken);
-            connection.setRequestMethod("GET");
-            int responseCode = connection.getResponseCode();
-            if (responseCode == HttpsURLConnection.HTTP_OK) {
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
-                String readerData = reader.readLine();
-                ObjectMapper mapper = new ObjectMapper();
-                ArrayList<String> seasons = getSeasons(readerData);
-                for (String season : seasons) {
-                    try {
-                                String fieldUrlStr = String.format(
-                                        "https://platform-api.onesoil.ai/ru/v1/seasons/%s/fields?with=crops&with=geometry&with=last_ndvi",
-                                        season);
-                                URI fieldURI = new URI(fieldUrlStr);
-                                URL fieldURL = fieldURI.toURL();
-                                HttpsURLConnection secondConnection = (HttpsURLConnection) fieldURL.openConnection();
-                                secondConnection.setRequestMethod("GET");
-                                secondConnection.setRequestProperty("Authorization", formattedToken);
-                                if (secondConnection.getResponseCode() == HttpsURLConnection.HTTP_OK) {
-                                    BufferedReader fieldReader = new BufferedReader(new InputStreamReader(
-                                            secondConnection.getInputStream(), StandardCharsets.UTF_8));
-                                    String fields = fieldReader.readLine();
-                                    FieldReaderResponse response = mapper.readValue(fields, FieldReaderResponse.class);
-                                    responses.add(response);
-
-                                } else {
-                                    System.out.println(secondConnection.getResponseCode());
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                            }
-                }
-            }
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        } catch (URISyntaxException ex2) {
-            System.out.println(ex2.getMessage());
+        ObjectMapper mapper = new ObjectMapper();
+        Season[] seasonsObj = collectedSeason.getData();
+        String[] seasons = new String[seasonsObj.length];
+        for (int i = 0; i < seasonsObj.length; i++) {
+            seasons[i] = Integer.toString(seasonsObj[i].getId());
         }
+        Thread[] threads = new Thread[seasons.length];
+        int index = 0;
+        for (String season : seasons) {
+            Thread fieldThread = new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        String fieldUrlStr = String.format(
+                                "https://platform-api.onesoil.ai/ru/v1/seasons/%s/fields?with=crops&with=geometry&with=last_ndvi",
+                                season);
+                        URI fieldURI = new URI(fieldUrlStr);
+                        URL fieldURL = fieldURI.toURL();
+                        HttpsURLConnection secondConnection = (HttpsURLConnection) fieldURL.openConnection();
+                        secondConnection.setRequestMethod("GET");
+                        secondConnection.setRequestProperty("Authorization", formattedToken);
+                        if (secondConnection.getResponseCode() == HttpsURLConnection.HTTP_OK) {
+                            BufferedReader fieldReader = new BufferedReader(new InputStreamReader(
+                                    secondConnection.getInputStream(), StandardCharsets.UTF_8));
+                            String fields = fieldReader.readLine();
+                            FieldReaderResponse response = mapper.readValue(fields, FieldReaderResponse.class);
+                            if (response.getData() != null) {
+                                convertMultidimensionalArray(response);
+                            }
+                            responses.add(response);
+                        } else {
+                            System.out.println(secondConnection.getResponseCode());
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+            threads[index] = fieldThread;
+            threads[index].start();
+            index++;
+        }
+        for (Thread thread : threads) {
+            thread.join();
+        }
+        // Thread.currentThread().join();
         return responses;
     }
 
@@ -179,6 +181,33 @@ public class FieldDataModule {
         }
 
         return notes.toArray(new Note[notes.size()]);
+    }
+
+    private void convertMultidimensionalArray(FieldReaderResponse response) {
+        for (Field field : response.getData().getRows()) {
+            ArrayList<float[]> coordinates = new ArrayList<>();
+            for (float[][][] thirdDim : field.getgeometry().getCoordinates()) {
+                float[][] mainSecondDim = thirdDim[0];
+                // for (float[][] secondDim : thirdDim) {
+                // try {
+                // for (float[] realDim : secondDim) {
+                // coordinates.add(new float[]{realDim[0], realDim[1]});
+                // }
+                // } catch (Exception ex) {
+                // System.out.println(ex);
+                // }
+                // }
+                try {
+                    for (float[] realDim : mainSecondDim) {
+                        coordinates.add(new float[] { realDim[0], realDim[1] });
+                    }
+                } catch (Exception ex) {
+                    System.out.println(ex);
+                }
+            }
+            // coordinates.remove(coordinates.size()-1);
+            field.setRealCoordinates(coordinates.toArray(new float[coordinates.size()][2]));
+        }
     }
 
     public String getToken() {

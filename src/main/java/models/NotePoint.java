@@ -2,11 +2,11 @@ package models;
 
 public class NotePoint {
     private String type;
-    private int[] coordinates;
+    private float[] coordinates;
 
     public NotePoint(){}
 
-    public NotePoint(String type, int[] coordinates) {
+    public NotePoint(String type, float[] coordinates) {
         this.type = type;
         this.coordinates = coordinates;
     }
@@ -19,11 +19,11 @@ public class NotePoint {
         this.type = type;
     }
 
-    public int[] getCoordinates() {
+    public float[] getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(int[] coordinates) {
+    public void setCoordinates(float[] coordinates) {
         this.coordinates = coordinates;
     }
 
