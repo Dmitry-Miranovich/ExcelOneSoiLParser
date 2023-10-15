@@ -18,6 +18,7 @@ public class Note {
     private String field_user_season_uuid;
     private String sharing_code;
     private String fieldTitle;
+    private int fieldID;
 
     
 
@@ -160,6 +161,14 @@ public class Note {
 
     public void setFieldTitle(String fieldTitle) {
         this.fieldTitle = fieldTitle;
+    }
+
+    public int getFieldID() {
+        return fieldID;
+    }
+
+    public void setFieldID(int fieldID) {
+        this.fieldID = fieldID;
     }
 
     

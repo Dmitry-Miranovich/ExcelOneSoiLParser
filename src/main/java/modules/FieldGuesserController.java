@@ -1,14 +1,7 @@
 package modules;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-import constants.ExcelHeaders;
-import constants.KmlEnum;
 import models.Field;
 import models.FieldReaderResponse;
 import models.Note;
@@ -45,26 +38,14 @@ public class FieldGuesserController {
     }
 
     public void appendNearestFieldByNote(){
-        // String fieldName = "";
-        // StringBuilder builder = new StringBuilder();
         for(NoteResponse response : noteResponses){
             for(Note note : response.getData()){
                 FieldPoint nearestPoint = getNearestPoint(note);
-                // float[] fieldPoint = nearestPoint.getPoint();
                 String fieldTitle = nearestPoint.getField().getTitle();
-                // builder.append(String.format("Current note is %s%nNearest point to the note mark is x:%f and y:%f of the field %s%n",note.getText(),fieldPoint[0], fieldPoint[1], fieldTitle));
+                note.setFieldTitle(fieldTitle);
+                note.setFieldID(nearestPoint.getField().getId());
             }
         }
-        // try{
-        //     String filePath = ExcelHeaders.ONESOIL_FIELDS_OUTPUT_TXT;
-        //     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath), StandardCharsets.UTF_8));
-        //     writer.write(builder.toString());
-        //     writer.flush();
-        //     writer.close();
-        // }catch(IOException exception){
-        //     System.out.println(exception.getMessage());
-        // }
-
         /**
          * Три этапа для нахождения, входит ли точка в поле
          * 1) Определение ближайшей точки среди всех полей
@@ -90,6 +71,7 @@ public class FieldGuesserController {
                             nearestPoint = fieldPoint;
                             point.setField(field);
                             point.setPoint(nearestPoint);
+                            note.setSeason_id(field.getSeasonID());
                         }
                     }
                 }

@@ -16,6 +16,9 @@ public class SeasonResponse {
         this.success = success;
         this.data = data;
     }
+    public SeasonResponse(Season[] data){
+        this.data = data;
+    }
 
     public String getSuccess() {
         return success;

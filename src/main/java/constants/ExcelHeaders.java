@@ -3,7 +3,7 @@ package constants;
 public class ExcelHeaders{
     public static String[] fieldsHeader = new String[]{"ID п", "Название", "Площадь", "Культура", "Дата посева", "Дата сбора урожая", "Выходное значение","Единицы выходных значений", "Разнообразие культур", "Источник", "Создано","Обновлено", "ID сезона"};
     public static String[] seasonHeader = new String[]{"ID с", "Название", "С", "По", "Email"};
-    public static String[] notesHeader = new String[]{"ID з","Тип", "Текст", "Создано", "Обновлено","Единицы на метр", "ID сезона","Код сезона"};
+    public static String[] notesHeader = new String[]{"ID з","Тип", "Текст", "Создано", "Обновлено","Единицы на метр", "ID сезона","Код сезона", "Имя поля", "Код поля"};
 
     public static final String ONESOIL_FIELDS_OUTPUT = "D:/OneSoilPath/onesoil_fields.xls";
     public static final String ONESOIL_FIELDS_OUTPUT_COORDINATES = "D:/OneSoilPath/onesoil_fields.zns";
@@ -38,6 +38,8 @@ public class ExcelHeaders{
      public static final int NOTE_SHEET_UNITS_PER_METER_INDEX = 5;
      public static final int NOTE_SHEET_SEASON_ID_INDEX = 6;
      public static final int NOTE_SHEET_SHARING_CODE_INDEX = 7;
+     public static final int NOTE_SHEET_FIELDNAME_INDEX = 8;
+     public static final int NOTE_SHEET_FIELD_ID_INDEX = 9;
     /*
      * private int id;
     private String uuid;

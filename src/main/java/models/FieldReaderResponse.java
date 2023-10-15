@@ -4,6 +4,7 @@ public class FieldReaderResponse {
     private String success;
     private FieldsData data;
     private String seasonName;
+    private int seasonID;
 
     public FieldReaderResponse(){}
     public FieldReaderResponse(String success, FieldsData data) {
@@ -28,4 +29,11 @@ public class FieldReaderResponse {
     public void setSeasonName(String seasonName) {
         this.seasonName = seasonName;
     }
+    public int getSeasonID() {
+        return seasonID;
+    }
+    public void setSeasonID(int seasonID) {
+        this.seasonID = seasonID;
+    }
+    
 }

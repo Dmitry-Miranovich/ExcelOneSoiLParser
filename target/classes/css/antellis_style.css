@@ -1,0 +1,46 @@
+.antellis-box{
+    -fx-padding: 10px;
+}
+.antellise-generate-button{
+    -fx-pref-width: 150px;
+    -fx-pref-height: 20px;
+}
+.date-picker-container{
+    -fx-padding: 5px;
+}
+.date-container{
+    /* -fx-pref-height: 100px; */
+}
+.antellise-start-date{
+    
+}
+.antellise-end-date{
+    
+}
+.antellise-generate-button-container{
+    -fx-padding: 5px;
+}
+.antellise-generate-button{
+
+}
+.antellise-file-path-container{
+    -fx-pref-height: 50px;
+    -fx-alignment: "CENTER-LEFT";
+    -fx-padding: 5px;
+}
+.antellise-file-path-button{
+    -fx-pref-width: 125px;
+}
+.antellise-file-path-textField{
+    -fx-pref-width: 235px;
+}
+.antellise-progress-bar-container{
+    -fx-pref-height: 390px;
+    -fx-alignment: "BOTTOM-LEFT";
+}
+.antellise-progress-bar-label{
+    -fx-pref-height: 50px;
+}
+.antellise-progress-bar{
+    -fx-pref-width: 600px;
+}

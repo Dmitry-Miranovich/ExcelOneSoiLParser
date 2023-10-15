@@ -75,10 +75,10 @@ public class Field {
     public void setCentroid(Centroid centroid) {
         this.centroid = centroid;
     }
-    public Geometry getgeometry() {
+    public Geometry getGeometry() {
         return geometry;
     }
-    public void setgeometry(Geometry geometry) {
+    public void setGeometry(Geometry geometry) {
         this.geometry = geometry;
     }
     public Crops[] getCrops() {
@@ -112,14 +112,6 @@ public class Field {
 
     public void setRealCoordinates(float[][] realCoordinates) {
         this.realCoordinates = realCoordinates;
-    }
-
-    public Geometry getGeometry() {
-        return geometry;
-    }
-
-    public void setGeometry(Geometry geometry) {
-        this.geometry = geometry;
     }
 
     public int getSeasonID() {

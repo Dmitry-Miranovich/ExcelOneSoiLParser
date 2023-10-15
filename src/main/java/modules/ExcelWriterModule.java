@@ -1,21 +1,15 @@
 package modules;
-
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-
 import models.Field;
 import java.util.ArrayList;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import constants.ExcelHeaders;
 import models.FieldReaderResponse;
@@ -95,15 +89,16 @@ public class ExcelWriterModule {
 
     public void writeFile(Workbook book){
         try{
-            File file = new File(ExcelHeaders.ONESOIL_FIELDS_OUTPUT);
+            File file = new File(filePath);
             if(!file.exists()){
                 File dir = new File(file.getParent());
                 dir.mkdir();
             }
             FileOutputStream stream = new FileOutputStream(filePath);
-            
             book.write(stream);
             book.close();
+            stream.flush();
+            stream.close();
         }catch(IOException ex){
             System.out.println(ex.getMessage());
         }    
@@ -112,7 +107,8 @@ public class ExcelWriterModule {
     private void writeResponseData(Workbook book, Sheet sheet, FieldReaderResponse response){
         Field[] rows = response.getData().getRows();
         for(Field row: rows){
-            Row sheetRow = sheet.createRow(useRow());
+            if(row.getSeasonID() > 0){
+                Row sheetRow = sheet.createRow(useRow());
             Cell IDCell = sheetRow.createCell(ExcelHeaders.SHEET_ID_INDEX);
             Cell titleCell = sheetRow.createCell(ExcelHeaders.SHEET_TITLE_INDEX);
             Cell areaCell = sheetRow.createCell(ExcelHeaders.SHEET_AREA_INDEX);
@@ -138,7 +134,10 @@ public class ExcelWriterModule {
             sourceCell.setCellValue((row.getCrops().length > 0)? row.getCrops()[0].getSource(): "");
             createdAtCell.setCellValue((row.getCrops().length > 0)? row.getCrops()[0].getCreated_at().toString(): "");
             updatedAtCell.setCellValue( (row.getCrops().length > 0)? row.getCrops()[0].getUpdated_at().toString(): "");
-            seasonIDCell.setCellValue((row.getCrops().length > 0)? row.getCrops()[0].getSeason_id(): 0);
+            seasonIDCell.setCellValue(row.getSeasonID());
+            }else{
+                System.out.println("bad Field founded");
+            }
         }        
     }
 
@@ -171,6 +170,8 @@ public class ExcelWriterModule {
             Cell unitsPerMeterCell = row.createCell(ExcelHeaders.NOTE_SHEET_UNITS_PER_METER_INDEX);
             Cell seasonIDCell = row.createCell(ExcelHeaders.NOTE_SHEET_SEASON_ID_INDEX);
             Cell sharingCodeCell = row.createCell(ExcelHeaders.NOTE_SHEET_SHARING_CODE_INDEX);
+            Cell fieldTitleCell = row.createCell(ExcelHeaders.NOTE_SHEET_FIELDNAME_INDEX);
+            Cell fieldIDCell = row.createCell(ExcelHeaders.NOTE_SHEET_FIELD_ID_INDEX);
             idCell.setCellValue((note.getId() > 0)?note.getId(): 0);
             typCell.setCellValue((note.getType() != null)?note.getType(): "");
             textCell.setCellValue((note.getText() != null)?note.getText(): "");
@@ -179,6 +180,8 @@ public class ExcelWriterModule {
             unitsPerMeterCell.setCellValue((note.getUnits_per_meter() != null)? note.getUnits_per_meter(): "");
             seasonIDCell.setCellValue((note.getSeason_id() >0)? note.getSeason_id(): 0);
             sharingCodeCell.setCellValue((note.getSharing_code() != null)? note.getSharing_code(): "");
+            fieldTitleCell.setCellValue((note.getFieldTitle() != null)? note.getFieldTitle(): "");
+            fieldIDCell.setCellValue((note.getFieldID() > 0)? note.getFieldID(): -1);
         }
     }
 

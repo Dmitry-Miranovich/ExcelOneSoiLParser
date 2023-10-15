@@ -21,6 +21,8 @@ public class AuthModule {
 
     private String email = "";
     private String password = "";
+    public static final String SEASON_URL = "https://platform-api.onesoil.ai/ru/v1/seasons";
+    public static final String NOTES_URL = "https://platform-api.onesoil.ai/en/v2/notes";
 
     public AuthModule(String email, String password){
         this.email = email;
