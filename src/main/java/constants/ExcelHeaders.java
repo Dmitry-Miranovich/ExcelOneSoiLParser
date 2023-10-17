@@ -1,7 +1,7 @@
 package constants;
 
 public class ExcelHeaders{
-    public static String[] fieldsHeader = new String[]{"ID п", "Название", "Площадь", "Культура", "Дата посева", "Дата сбора урожая", "Выходное значение","Единицы выходных значений", "Разнообразие культур", "Источник", "Создано","Обновлено", "ID сезона"};
+    public static String[] fieldsHeader = new String[]{"ID п", "Номер поля","Урочища", "Площадь", "Культура", "Дата посева", "Дата сбора урожая", "Выходное значение","Единицы выходных значений", "Разнообразие культур", "Источник", "Создано","Обновлено", "ID сезона"};
     public static String[] seasonHeader = new String[]{"ID с", "Название", "С", "По", "Email"};
     public static String[] notesHeader = new String[]{"ID з","Тип", "Текст", "Создано", "Обновлено","Единицы на метр", "ID сезона","Код сезона", "Имя поля", "Код поля"};
 
@@ -11,18 +11,19 @@ public class ExcelHeaders{
     public static final String ONESOIL_FIELDS_OUTPUT_TXT = "D:/OneSoilPath/onesoil_fields.txt";
 
     public static final int SHEET_ID_INDEX = 0;
-    public static final int SHEET_TITLE_INDEX = 1;
-    public static final int SHEET_AREA_INDEX = 2;
-    public static final int SHEET_CROP_INDEX = 3;
-    public static final int SHEET_SOWING_DATE_INDEX = 4;
-    public static final int SHEET_HARVEST_DATE_INDEX = 5;
-    public static final int SHEET_YIELD_VALUE_INDEX = 6;
-    public static final int SHEET_YIELD_VALUE_UNITS_INDEX = 7;
-    public static final int SHEET_VARIETY_INDEX = 8;
-    public static final int SHEET_SOURCE_INDEX = 9;
-    public static final int SHEET_CREATED_AT_INDEX = 10;
-    public static final int SHEET_UPDATED_AT_INDEX = 11;
-    public static final int SHEET_SEASON_ID_INDEX = 12;
+    public static final int SHEET_FIELD_NUMBER_INDEX = 1;
+    public static final int SHEET_NAME_INDEX = 2;
+    public static final int SHEET_AREA_INDEX = 3;
+    public static final int SHEET_CROP_INDEX = 4;
+    public static final int SHEET_SOWING_DATE_INDEX = 5;
+    public static final int SHEET_HARVEST_DATE_INDEX = 6;
+    public static final int SHEET_YIELD_VALUE_INDEX = 7;
+    public static final int SHEET_YIELD_VALUE_UNITS_INDEX = 8;
+    public static final int SHEET_VARIETY_INDEX = 9;
+    public static final int SHEET_SOURCE_INDEX = 10;
+    public static final int SHEET_CREATED_AT_INDEX = 11;
+    public static final int SHEET_UPDATED_AT_INDEX = 12;
+    public static final int SHEET_SEASON_ID_INDEX = 13;
 
     public static final int SEASON_SHEET_ID_INDEX = 0;
     public static final int SEASON_SHEET_TITLE_INDEX = 1;

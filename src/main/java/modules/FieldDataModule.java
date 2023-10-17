@@ -8,6 +8,7 @@ import models.Note;
 import models.Field;
 import models.NoteResponse;
 import models.Season;
+import models.SeasonField;
 import models.SeasonResponse;
 
 import java.net.URI;
@@ -45,7 +46,7 @@ public class FieldDataModule {
         this.excelBook = excelBook;
     }
 
-    public ArrayList<FieldReaderResponse> getFieldResponses(SeasonResponse collectedSeason, String url, String token)
+    public ArrayList<FieldReaderResponse> getFieldResponses(SeasonResponse collectedSeason, String token)
             throws InterruptedException {
         String formattedToken = String.format("Token %s", token);
         ArrayList<FieldReaderResponse> responses = new ArrayList<>();
@@ -198,6 +199,10 @@ public class FieldDataModule {
             }
         }
         return notes.toArray(new Note[notes.size()]);
+    }
+
+    private void setFieldData(Note note){
+        
     }
 
     private void convertMultidimensionalArray(FieldReaderResponse response) {

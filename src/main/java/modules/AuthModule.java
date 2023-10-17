@@ -85,7 +85,7 @@ public class AuthModule {
                     return Tokens.ZACHISTEAGRO;
             }
             default:{
-                return Tokens.LOSHNICKIJ_KRAI;
+                return Tokens.ALL_TOKENS;
             }
         }
     }

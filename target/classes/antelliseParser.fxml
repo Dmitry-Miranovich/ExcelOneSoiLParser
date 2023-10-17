@@ -27,15 +27,18 @@
         </Button> -->
         <HBox styleClass="date-container">
             <children>
-                <VBox styleClass="date-picker-container">
+                <VBox fx:id="seasonPickerContainer" styleClass="date-picker-container">
                     <children>
                         <Label text="Начало сезона">
                         </Label>
-                        <DatePicker fx:id="startDatePicker" onAction="#onClickGetStartDate" styleClass="antellise-end-date">
-                        </DatePicker>
+                        <Button fx:id="antelliseSeasonButton" onAction="#onClickSeasonAction" styleClass="antellise-season-button" text="Выбор сезона">
+
+                        </Button>
+                        <!-- <DatePicker fx:id="startDatePicker" onAction="#onClickGetStartDate" styleClass="antellise-end-date">
+                        </DatePicker> -->
                     </children>
                 </VBox>
-                <VBox styleClass="date-picker-container">
+                <!-- <VBox styleClass="date-picker-container">
                     <children>
                         <Label text="Конец сезона">
 
@@ -43,7 +46,7 @@
                         <DatePicker fx:id="endDatePicker" styleClass="antellise-start-date">
                         </DatePicker>
                     </children>
-                </VBox>
+                </VBox> -->
             </children>
         </HBox>
         <HBox styleClass="antellise-file-path-container">

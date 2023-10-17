@@ -12,8 +12,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import constants.ExcelHeaders;
 import models.AntellisField;
+import models.Crops;
 import models.Field;
 import models.FieldCoordinate;
+import models.FieldReaderResponse;
 
 public class FieldCreatorModule {
 
@@ -57,6 +59,16 @@ public class FieldCreatorModule {
             writer.close();
         } catch (IOException exception) {
             System.out.println(exception.getMessage());
+        }
+    }
+
+    public void createAntelliseFields(ArrayList<ArrayList<FieldReaderResponse>> fieldResponses) {
+        for (ArrayList<FieldReaderResponse> responses : fieldResponses) {
+            for (FieldReaderResponse response : responses) {
+                for (Field field : response.getData().getRows()) {
+                    writeAntellisField(field);
+                }
+            }
         }
     }
 

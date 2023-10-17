@@ -96,7 +96,7 @@ public class Main extends Application {
                 SeasonResponse seasonResponse = fieldModule.getSeasonResponse(seasons, token);
                 seasonResponse.setEmail(email);
                 seasonResponses.add(seasonResponse);
-                ArrayList<FieldReaderResponse> responses = fieldModule.getFieldResponses(seasonResponse, seasons, token);
+                ArrayList<FieldReaderResponse> responses = fieldModule.getFieldResponses(seasonResponse, token);
                 emailFieldResponses.add(responses);
                 NoteResponse noteResponse = fieldModule.getNoteResponse(notes, token);
                 noteResponses.add(noteResponse);
@@ -151,4 +151,6 @@ public class Main extends Application {
         controller.endKML();
         controller.writeFile(controller.getFullKMLString());
     }
+
+
 }

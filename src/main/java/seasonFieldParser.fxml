@@ -49,11 +49,11 @@
                         <Font size="24.0" />
                      </font>
                   </ToggleButton>
-                  <ToggleButton fx:id="gEarthButton" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#handleButtonClick" prefHeight="53.0" prefWidth="180.0" styleClass="sidebarButton" text="GoogleEarth" textFill="WHITE">
+                  <!-- <ToggleButton fx:id="gEarthButton" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#handleButtonClick" prefHeight="53.0" prefWidth="180.0" styleClass="sidebarButton" text="GoogleEarth" textFill="WHITE">
                      <font>
                         <Font size="24.0" />
                      </font>
-                  </ToggleButton>
+                  </ToggleButton> -->
                </children>
             </VBox>
          </children>
@@ -73,7 +73,9 @@
                         <CheckBox fx:id="notesCheckBox" mnemonicParsing="false" onMouseClicked="#handleCheckboxClick" styleClass="one-soil-checkbox" text="Заметки" />
                      </children>
                   </HBox>
-                  <Button fx:id="seasonsButton" mnemonicParsing="false" onAction="#onClickSeasonButton" prefHeight="48.0" prefWidth="126.0" styleClass="seasonsButton" text="Выбрать сезоны" />
+                  <HBox fx:id="oneSoilSeasonButtonsBox" styleClass="one-soil-season-button-box">
+                     <Button fx:id="seasonsButton" mnemonicParsing="false" onAction="#onClickSeasonButton" prefWidth="126.0" styleClass="seasonsButton" text="Выбрать сезоны" />
+                  </HBox>
                   <HBox prefHeight="54.0" prefWidth="442.0" styleClass="file-path-input">
                      <children>
                         <Button fx:id="filePathButton" mnemonicParsing="false" onAction="#onClickSearchFilePath" prefHeight="26.0" prefWidth="128.0" text="Указать путь файлу" />

@@ -110,7 +110,8 @@ public class ExcelWriterModule {
             if(row.getSeasonID() > 0){
                 Row sheetRow = sheet.createRow(useRow());
             Cell IDCell = sheetRow.createCell(ExcelHeaders.SHEET_ID_INDEX);
-            Cell titleCell = sheetRow.createCell(ExcelHeaders.SHEET_TITLE_INDEX);
+            Cell numberFieldCell = sheetRow.createCell(ExcelHeaders.SHEET_FIELD_NUMBER_INDEX);
+            Cell fieldNameCell = sheetRow.createCell(ExcelHeaders.SHEET_NAME_INDEX);
             Cell areaCell = sheetRow.createCell(ExcelHeaders.SHEET_AREA_INDEX);
             Cell cropCell = sheetRow.createCell(ExcelHeaders.SHEET_CROP_INDEX);
             Cell sowingDateCell = sheetRow.createCell(ExcelHeaders.SHEET_SOWING_DATE_INDEX); 
@@ -123,7 +124,13 @@ public class ExcelWriterModule {
             Cell updatedAtCell = sheetRow.createCell(ExcelHeaders.SHEET_UPDATED_AT_INDEX);
             Cell seasonIDCell = sheetRow.createCell(ExcelHeaders.SHEET_SEASON_ID_INDEX);
             IDCell.setCellValue(row.getId());
-            titleCell.setCellValue(row.getTitle());
+            String[] spittedTitle = row.getTitle().split("\\s");
+            if(row.getTitle().charAt(0)!= '№' || spittedTitle.length <= 1){
+                numberFieldCell.setCellValue(row.getTitle());
+            }else{
+                numberFieldCell.setCellValue(spittedTitle[0]);    
+                fieldNameCell.setCellValue(spittedTitle[1]);
+            }
             areaCell.setCellValue(row.getArea());
             cropCell.setCellValue((row.getCrops().length > 0)?row.getCrops()[0].getCrop():"");
             sowingDateCell.setCellValue((row.getCrops().length > 0 && row.getCrops()[0].getSowing_date() != null)? row.getCrops()[0].getSowing_date().toString() : "");

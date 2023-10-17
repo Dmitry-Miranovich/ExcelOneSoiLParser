@@ -21,9 +21,13 @@
     -fx-alignment: center-left;
 }
 .seasonsButton{
-    -fx-padding: 15px;
-    -fx-border-insets: 10px;
-    -fx-background-insets: 10px;
+    /* -fx-padding: 15px; */
+    /* -fx-border-insets: 10px;
+    -fx-background-insets: 10px; */
+    -fx-pref-height: 30px;
+}
+.one-soil-season-button-box{
+    -fx-padding: 10px;
 }
 .season-list{
     -fx-pref-width: 150px;
@@ -31,6 +35,11 @@
     -fx-padding: 10px;
     -fx-border-insets: 10px;
     -fx-background-insets: 10px;
+}
+.note-season-button{
+    -fx-pref-width: 100px;
+    -fx-padding: 10px;
+    -fx-pref-height: 30px;
 }
 .file-path-input{
     -fx-padding: 10px;
