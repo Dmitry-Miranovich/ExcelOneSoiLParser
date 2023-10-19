@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.File;
+
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import constants.Warnings;
 import exceptions.MissingDateException;
 import exceptions.MissingFilePathException;
 import exceptions.SeasonsException;
+import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -40,13 +42,13 @@ public class AntelliseController implements Initializable {
     private boolean isSeasonListOpened = false;
     private HashMap<Integer, String> selectedSeasonItems = new HashMap<>();
     public static Stage stage;
+    public static boolean isAllSeasonSelected = false;
+    public static Button proxySeasonButton;
 
     @FXML
     private VBox antellisBox;
-
     @FXML
     private Button antellisGenerateButton;
-
     @FXML
     private VBox seasonPickerContainer;
     // @FXML
@@ -54,7 +56,7 @@ public class AntelliseController implements Initializable {
     // @FXML
     // private DatePicker endDatePicker;
     @FXML
-    public static Button antelliseSeasonButton;
+    private Button antelliseSeasonButton;
     @FXML
     private Button antellisFilePathButton;
     @FXML
@@ -65,9 +67,17 @@ public class AntelliseController implements Initializable {
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-
+        antellisBox.visibleProperty().addListener((some) -> {
+            BooleanProperty prop = (BooleanProperty) some;
+            if(prop.getValue() == true){
+                System.out.println(isAllSeasonSelected);
+            }
+        });
+        // proxySeasonButton = 
     }
     //actions
+
+    
 
     @FXML
     public void onClickSetFilePath(ActionEvent event){

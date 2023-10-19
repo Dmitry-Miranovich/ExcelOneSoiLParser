@@ -3,12 +3,12 @@ package modules;
 import javax.net.ssl.HttpsURLConnection;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import controller.MainController;
 import models.FieldReaderResponse;
 import models.Note;
 import models.Field;
 import models.NoteResponse;
 import models.Season;
-import models.SeasonField;
 import models.SeasonResponse;
 
 import java.net.URI;
@@ -90,7 +90,9 @@ public class FieldDataModule {
             HttpsURLConnection secondConnection = (HttpsURLConnection) fieldURL.openConnection();
             secondConnection.setRequestMethod("GET");
             secondConnection.setRequestProperty("Authorization", formattedToken);
-            if (secondConnection.getResponseCode() == HttpsURLConnection.HTTP_OK) {
+            secondConnection.setConnectTimeout(10000);
+            int responseCode = secondConnection.getResponseCode();
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
                 BufferedReader fieldReader = new BufferedReader(new InputStreamReader(
                         secondConnection.getInputStream(), StandardCharsets.UTF_8));
                 String fields = fieldReader.readLine();
@@ -103,9 +105,11 @@ public class FieldDataModule {
             } else {
                 System.out.println(secondConnection.getResponseCode());
             }
+            secondConnection.disconnect();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        
     }
 
     private String[] getSeasonsId(SeasonResponse collectedSeason) {
@@ -119,23 +123,28 @@ public class FieldDataModule {
 
     public SeasonResponse getSeasonResponse(String url, String token) {
         String formattedToken = String.format("Token %s", token);
+        MainController controller = new MainController();
         SeasonResponse response = null;
         try {
             URI seasonsURI = new URI(url);
             URL seasonURL = seasonsURI.toURL();
             HttpsURLConnection connection = (HttpsURLConnection) seasonURL.openConnection();
+            connection.setReadTimeout(1000);
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Authorization", formattedToken);
-            if (connection.getResponseCode() == HttpsURLConnection.HTTP_OK) {
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
                 ObjectMapper mapper = new ObjectMapper();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String seasonJSON = reader.readLine();
                 response = mapper.readValue(seasonJSON, SeasonResponse.class);
+            }else{
+                System.out.println("someshi");
             }
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            controller.showWarningMessage("Не удалось подключится к серверам OneSoil");
         } catch (URISyntaxException ex2) {
-            System.out.println(ex2.getMessage());
+            controller.showWarningMessage("Указанный url больше не доступен");
         }
         return response;
     }

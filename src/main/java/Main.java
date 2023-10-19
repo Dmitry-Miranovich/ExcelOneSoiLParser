@@ -9,6 +9,7 @@ import java.util.GregorianCalendar;
 import constants.Emails;
 import constants.ExcelHeaders;
 import constants.KmlEnum;
+import controller.AntelliseController;
 import controller.MainController;
 import javafx.application.Application;
 
@@ -31,7 +32,7 @@ import modules.FieldGuesserController;
 import modules.KmlCreatorController;
 
 public class Main extends Application {
-    public static void main(String[] args) {
+    public static void run(String[] args) {
         launch(args);
     }
 
@@ -39,13 +40,14 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         try {
             primaryStage.setTitle("One Soil Parser");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/seasonFieldParser.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/seasonFieldParser.fxml"));
             Parent root = loader.load();
             InputStream fontStream = getClass().getResourceAsStream("/fonts/Akrobat-Regular.ttf");
             Font font = Font.loadFont(fontStream, 24);
-            // font.getFamilies().forEach(System.out::println);
-            root.getStylesheets().addAll("/css/one_soil_style.css", "/css/antellis_style.css");
+
+            root.getStylesheets().addAll("/resources/css/one_soil_style.css", "/resources/css/antellis_style.css");
             MainController.stage = primaryStage;
+            
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.show();

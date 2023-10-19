@@ -7,9 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import org.apache.commons.collections4.iterators.ArrayListIterator;
-import org.controlsfx.control.CheckComboBox;
-
 import constants.Emails;
 import constants.ExcelHeaders;
 import constants.Tokens;
@@ -187,10 +184,13 @@ public class MainController implements Initializable {
             seasons = module.getSeasonResponse(AuthModule.SEASON_URL, token);
             seasonsButton.setDisable(false);
             // AntelliseController.antelliseSeasonButton.setDisable(false);
+            AntelliseController.isAllSeasonSelected = false;
+            
         } else {
             isAllSeasonsApplied = true;
             seasonsButton.setDisable(true);
             // AntelliseController.antelliseSeasonButton.setDisable(true);
+            AntelliseController.isAllSeasonSelected = true;
         }
 
     }
@@ -242,7 +242,7 @@ public class MainController implements Initializable {
         isSeasonListOpened = isSeasonListOpened ? false : true;
         seasonPane = new Pane();
         seasonPane.getStyleClass().add("main-pane");
-        ListView<String> seasonList = new MultipleSelectionListView<>();
+        ListView<String> seasonList = new ListView<>();
         seasonPane.setPrefHeight(350);
         seasonList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         seasonList.getStyleClass().add("season-list");

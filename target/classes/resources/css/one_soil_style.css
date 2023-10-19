@@ -17,6 +17,9 @@
 .one-soil-checkbox{
     -fx-padding: 10px;
 }
+.cell.indexed-cell.list-cell.selected{
+    -fx-background-color: black;
+}
 .one-soil-checkbox-container{
     -fx-alignment: center-left;
 }
