@@ -7,15 +7,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javax.swing.plaf.basic.BasicTabbedPaneUI.MouseHandler;
+
 import constants.Emails;
 import constants.ExcelHeaders;
 import constants.Tokens;
 import constants.Warnings;
+import eventHandlers.MultipleItemsEventHandler;
+import eventHandlers.SingleItemEventHandler;
 import exceptions.MissingFilePathException;
 import exceptions.SeasonsException;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -52,6 +58,7 @@ import modules.AuthModule;
 import modules.ExcelWriterModule;
 import modules.FieldDataModule;
 import modules.FieldGuesserController;
+import modules.ListViewState;
 import modules.ProgressBarController;
 
 public class MainController implements Initializable {
@@ -64,14 +71,21 @@ public class MainController implements Initializable {
     private ToggleButton prevButton;
     private VBox prevBox;
     private boolean isSeasonListOpened = false;
+    private boolean isNoteSeasonListOpened = false;
     private ArrayList<String> checkboxMarks = new ArrayList<>();
     public static HashMap<Integer, String> selectedSeasonItems = new HashMap<>();
+    public static HashMap<Integer, String> selectedNoteSeasonsItems = new HashMap<>();
     public ArrayList<Integer> selectedIndexes = new ArrayList<>();
     private String token;
     public static Stage stage;
     public static SeasonResponse seasons;
     private String excelFilePath;
     private Pane seasonPane;
+    private Pane noteSeasonPane;
+
+    private ListViewState seasonListState = new ListViewState(false);
+    private ListViewState noteSeasonListState = new ListViewState(false);
+    private String currentSeasonNote;
 
     @FXML
     private Label emailLabel;
@@ -86,8 +100,6 @@ public class MainController implements Initializable {
     @FXML
     private TextField filePathTextField;
 
-    @FXML
-    private FlowPane pane;
     @FXML
     public ToggleButton oneSoilButton;
     @FXML
@@ -116,6 +128,8 @@ public class MainController implements Initializable {
     public VBox defaultBox;
     @FXML
     private HBox oneSoilSeasonButtonsBox;
+    @FXML
+    private HBox listViewBox;
 
     @FXML
     public ComboBox<String> emailBox;
@@ -131,6 +145,7 @@ public class MainController implements Initializable {
         prevButton = oneSoilButton;
         prevBox = oneSoilBox;
         filePathTextField.setEditable(false);
+        oneSoilSeasonButtonsBox.getStyleClass().add("onesoil-season-button-box");
     }
 
     @FXML
@@ -147,7 +162,7 @@ public class MainController implements Initializable {
     @FXML
     public void handleCheckboxClick(MouseEvent event) {
         CheckBox currBox = (CheckBox) event.getSource();
-        if(currBox == notesCheckBox){
+        if (currBox == notesCheckBox) {
             noteCheckBoxAction(currBox);
         }
         if (!currBox.isSelected()) {
@@ -156,14 +171,26 @@ public class MainController implements Initializable {
             checkboxMarks.remove(currBox.getId());
         }
     }
-    private void noteCheckBoxAction(CheckBox currBox){
-        if(currBox.isSelected()){     
+
+    private void noteCheckBoxAction(CheckBox currBox) {
+        if (currBox.isSelected()) {
             ToggleButton noteSeasons = new ToggleButton("Выбрать целевой сезон");
             noteSeasons.getStyleClass().add("note-season-button");
+            noteSeasons.setOnMouseClicked(event -> {
+                // ToggleButton currButton = (ToggleButton) event.getSource();
+                try {
+                        noteSeasonListState.setIsListOpened(!noteSeasonListState.isListOpened());
+                        noteSeasonListState.setListView(getListView());
+                        selectSeasons(noteSeasonListState, new SingleItemEventHandler(noteSeasonListState, noteSeasonListState.getListView(), getTitleMap()));
+                        // System.out.println(noteSeasonListState.getCurrentNote());
+                } catch (SeasonsException ex) {
+                    showWarningMessage(ex.getMessage());
+                }
+            });
             oneSoilSeasonButtonsBox.getChildren().add(noteSeasons);
-        }else{
-            oneSoilSeasonButtonsBox.getChildren().remove(oneSoilSeasonButtonsBox.getChildren().size()-1);
-        } 
+        } else {
+            oneSoilSeasonButtonsBox.getChildren().remove(oneSoilSeasonButtonsBox.getChildren().size() - 1);
+        }
     }
 
     // Селект бокс для выбора нужного emaila
@@ -185,7 +212,7 @@ public class MainController implements Initializable {
             seasonsButton.setDisable(false);
             // AntelliseController.antelliseSeasonButton.setDisable(false);
             AntelliseController.isAllSeasonSelected = false;
-            
+
         } else {
             isAllSeasonsApplied = true;
             seasonsButton.setDisable(true);
@@ -196,9 +223,12 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    public void onClickSeasonButton(ActionEvent event) throws SeasonsException {
+    public void onClickSeasonButton(ActionEvent event) {
         try {
-            selectSeasons();
+            seasonListState.setIsListOpened(!seasonListState.isListOpened());
+            HashMap<String, String> titleMap = getTitleMap();
+            seasonListState.setListView(getListView());
+            selectSeasons(seasonListState, new MultipleItemsEventHandler(seasonListState.getListView(), selectedSeasonItems, titleMap));
         } catch (SeasonsException ex) {
             showWarningMessage(ex.getMessage());
         }
@@ -226,6 +256,9 @@ public class MainController implements Initializable {
         if (selectedSeasonItems.size() < 0) {
             throw new SeasonsException(Warnings.NO_SEASONS_SELECTED_WARNING);
         }
+        if(noteSeasonListState.getCurrentNote() == null){
+            throw new SeasonsException(Warnings.NO_NOTE_SEASON_STRING);
+        }
         ExcelWriterModule excelBook = new ExcelWriterModule(excelFilePath);
         FieldDataModule mainModule = new FieldDataModule(excelBook);
         if (isAllSeasonsApplied) {
@@ -235,42 +268,61 @@ public class MainController implements Initializable {
         }
     }
 
-    public void selectSeasons() throws SeasonsException {
+    public void selectSeasons(ListViewState state, EventHandler<MouseEvent> currHandler)
+            throws SeasonsException {
         if (seasons == null) {
             throw new SeasonsException(Warnings.NO_SEASONS_WARNING);
         }
-        isSeasonListOpened = isSeasonListOpened ? false : true;
-        seasonPane = new Pane();
-        seasonPane.getStyleClass().add("main-pane");
-        ListView<String> seasonList = new ListView<>();
-        seasonPane.setPrefHeight(350);
-        seasonList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        seasonList.getStyleClass().add("season-list");
-        if (isSeasonListOpened) {
-            HashMap<String, String> map = new HashMap<>();
-            ArrayList<String> seasonTitles = new ArrayList<>();
-            for (Season season : seasons.getData()) {
-                map.put(season.getTitle(), Integer.toString(season.getId()));
-                seasonTitles.add(season.getTitle());
-            }
-            seasonList.getItems().setAll(seasonTitles);
-            seasonList.setOnMouseClicked(itemEvent -> {
-                int selectedIndex = seasonList.getSelectionModel().getSelectedIndex();
-                if (selectedSeasonItems.get(selectedIndex) == null) {
-                    selectedSeasonItems.put(selectedIndex,
-                            map.get(seasonList.getSelectionModel().getSelectedItem()));
-                } else {
-                    selectedSeasonItems.remove(seasonList.getSelectionModel().getSelectedIndex());
-                    seasonList.getSelectionModel().clearSelection(selectedIndex);
-                }
-            });
-            seasonPane.getChildren().add(seasonList);
-            oneSoilBox.getChildren().add(oneSoilBox.getChildren().size() - 1, seasonPane);
+        addSeasonList(state, currHandler);
+    }
+
+    private void addSeasonList(ListViewState state, EventHandler<MouseEvent> currEvent) {
+        if (state.isListOpened()) {
+            // state.setIsListOpened(state.isListOpened() ? false : true);
+            state.setCurrPane(new Pane());
+            state.getCurrPane().getStyleClass().add("main-pane");
+            state.getCurrPane().setPrefHeight(350);
+
+            state.getListView().setOnMouseClicked(currEvent);
+            state.getCurrPane().getChildren().add(state.getListView());
+            listViewBox.getChildren().add(state.getCurrPane());
         } else {
-            oneSoilBox.getChildren().remove(oneSoilBox.getChildren().size() - 2);
+            listViewBox.getChildren().remove(state.getCurrPane());
         }
     }
 
+    private HashMap<String, String> getTitleMap() throws SeasonsException{
+        if(seasons == null){
+            throw new SeasonsException(Warnings.NO_SEASONS_WARNING);
+        }
+        HashMap<String, String> map = new HashMap<>();
+            for (Season season : seasons.getData()) {
+                map.put(season.getTitle(), Integer.toString(season.getId()));
+            }
+        return map;
+    }
+    private ArrayList<String> getSeasonList() throws SeasonsException{
+        if(seasons == null){
+            throw new SeasonsException(Warnings.NO_SEASONS_WARNING);
+        }
+            ArrayList<String> seasonTitles = new ArrayList<>();
+            for (Season season : seasons.getData()) {
+                seasonTitles.add(season.getTitle());
+            }
+        return seasonTitles;
+    }
+
+    private ListView<String> getListView(){
+        ListView<String> seasonList = new ListView<>();
+        try{
+            seasonList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            seasonList.getStyleClass().add("season-list");
+            seasonList.getItems().setAll(getSeasonList());
+        }catch(SeasonsException ex){
+            showWarningMessage(Warnings.NO_SEASONS_WARNING);
+        }
+        return seasonList;
+    }
 
     @FXML
     public void onClickSearchFilePath() {
@@ -347,7 +399,7 @@ public class MainController implements Initializable {
                 }
             }
             FieldGuesserController fieldGuesserController = new FieldGuesserController(noteResponses, fieldResponses);
-            fieldGuesserController.appendNearestFieldByNote();
+            fieldGuesserController.appendNearestFieldByNote(noteSeasonListState.getCurrentNote());
             writeExcelData(writerModule, seasonResponses, fieldResponses, noteResponses);
         } catch (InterruptedException intException) {
             showWarningMessage(intException.getMessage());
@@ -375,7 +427,9 @@ public class MainController implements Initializable {
                         ProgressBarController.updateProgressBar(oneSoilProgressBar, 1.0 / selectedSeasonItems.size());
                     }
                     if (notesCheckBox.isSelected()) {
-                        fieldResponsesList.add(mainModule.getFieldReaderResponse(token, seasons));
+                        if(!fieldCheckBox.isSelected()){
+                            fieldResponsesList.add(mainModule.getFieldReaderResponse(token, seasons));
+                        } 
                         String seasonNotesURL = String.format("%s?filter%%7Bseason_id%%7D=%s", AuthModule.NOTES_URL,
                                 seasons);
                         noteResponseList.add(mainModule.getNoteResponse(seasonNotesURL, token));
@@ -395,7 +449,7 @@ public class MainController implements Initializable {
         }
         FieldGuesserController fieldGuesserController = new FieldGuesserController(noteResponseList,
                 fieldResponsesList);
-        fieldGuesserController.appendNearestFieldByNote();
+        fieldGuesserController.appendNearestFieldByNote(noteSeasonListState.getCurrentNote());
         writeExcelData(writerModule, seasonsResponsesList, fieldResponsesList, noteResponseList);
     }
 

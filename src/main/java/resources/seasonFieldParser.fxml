@@ -83,6 +83,8 @@
                      </children>
                   </HBox>
                   <Button fx:id="generateButton" mnemonicParsing="false" onAction="#onClickGenerateReport" prefHeight="48.0" prefWidth="145.0" styleClass="generateButton" text="Сгенерировать отчет" />
+                  <HBox fx:id="listViewBox" styleClass="listview-hbox">
+                  </HBox>
                   <VBox alignment="BOTTOM_LEFT" prefHeight="262.0" prefWidth="470.0">
                      <children>
                         <Label text="Текущий прогресс">

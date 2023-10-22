@@ -15,6 +15,10 @@
     -fx-pref-width: 125px
 }
 
+.antellise-main-pane{
+    -fx-pref-height: 350px;
+}
+
 .date-container{
     /* -fx-pref-height: 100px; */
 }
