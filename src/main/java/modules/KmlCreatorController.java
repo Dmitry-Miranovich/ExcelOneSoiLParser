@@ -89,15 +89,14 @@ public class KmlCreatorController implements IOKmlCreatorController{
         return kmlFile.toString();
     }
 
-    public void writeFile(String text){
+    public void writeFile(String text, String filePath){
         try{
-            String path = ExcelHeaders.ONESOIL_FIELDS_OUTPUT_KML;
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), StandardCharsets.UTF_8));
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath), StandardCharsets.UTF_8));
             writer.write(text);
             writer.flush();
             writer.close();
         }catch(IOException ioEx){
-
+            ioEx.printStackTrace();
         }
     }
 

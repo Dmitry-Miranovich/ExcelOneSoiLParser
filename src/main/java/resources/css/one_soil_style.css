@@ -40,9 +40,16 @@
     -fx-background-insets: 10px;
 }
 .note-season-button{
-    -fx-pref-width: 100px;
-    -fx-padding: 10px;
+    -fx-pref-width: 155px;
+    /* -fx-padding: 10px; */
     -fx-pref-height: 30px;
+}
+.listview-hbox{
+    -fx-pref-height: 350px;
+    -fx-background-color: yellow;
+}
+.onesoil-season-button-box{
+    -fx-spacing: 10px;
 }
 .file-path-input{
     -fx-padding: 10px;

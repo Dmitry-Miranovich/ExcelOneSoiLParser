@@ -49,8 +49,8 @@ public class FieldCreatorModule {
         }
     }
 
-    public void writeFile() {
-        try (FileOutputStream stream = new FileOutputStream(ExcelHeaders.ONESOIL_FIELDS_OUTPUT_COORDINATES)) {
+    public void writeFile(String filePath) {
+        try (FileOutputStream stream = new FileOutputStream(filePath)) {
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream, StandardCharsets.UTF_8));
             for (String s : antellisFields) {
                 writer.write(String.format("%s%n", s));
