@@ -44,7 +44,6 @@ public class Main extends Application {
             Parent root = loader.load();
             InputStream fontStream = getClass().getResourceAsStream("/fonts/Akrobat-Regular.ttf");
             Font font = Font.loadFont(fontStream, 24);
-
             root.getStylesheets().addAll("/resources/css/one_soil_style.css", "/resources/css/antellis_style.css");
             MainController.stage = primaryStage;
             
