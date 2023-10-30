@@ -12,14 +12,14 @@ public class FieldGuesserController {
     private ArrayList<NoteResponse> noteResponses;
     private ArrayList<ArrayList<FieldReaderResponse>> fieldResponses;
 
-    public FieldGuesserController(ArrayList<NoteResponse> noteResponses, ArrayList<ArrayList<FieldReaderResponse>> fieldResponses){
+    public FieldGuesserController(ArrayList<NoteResponse> noteResponses,
+            ArrayList<ArrayList<FieldReaderResponse>> fieldResponses) {
         this.noteResponses = noteResponses;
         this.fieldResponses = fieldResponses;
     }
 
-    public FieldGuesserController(){}
-
-
+    public FieldGuesserController() {
+    }
 
     public ArrayList<NoteResponse> getNoteResponses() {
         return noteResponses;
@@ -37,44 +37,49 @@ public class FieldGuesserController {
         this.fieldResponses = fieldResponses;
     }
 
-    public void appendNearestFieldByNote(String currentSeasonID){
-        for(NoteResponse response : noteResponses){
-            for(Note note : response.getData()){
-                FieldPoint nearestPoint = getNearestPoint(note, currentSeasonID);
+    public void appendNearestFieldByNote(String currentSeasonID, boolean isForAllSeason) {
+        for (NoteResponse response : noteResponses) {
+            for (Note note : response.getData()) {
+                FieldPoint nearestPoint = getNearestPoint(note, currentSeasonID, isForAllSeason);
                 String fieldTitle = nearestPoint.getField().getTitle();
                 note.setFieldTitle(fieldTitle);
                 note.setFieldID(nearestPoint.getField().getId());
             }
         }
-        /**
-         * Три этапа для нахождения, входит ли точка в поле
-         * 1) Определение ближайшей точки среди всех полей
-         * 2) Определение нормали полученной точки
-         * 3) Вычисление скалярного умножения двух векторов
-         *      1. В случае, если угол меньше 90 градусов - внутри
-         *      2. В противном случае - снаружи
-         */
-        // return fieldName;
     }
-
-    private FieldPoint getNearestPoint(Note note, String currentSeasonID){
+    //ОБЯЗАТЕЛЬНО ПОПРАВИТЬ!!!!!!!!!
+    private FieldPoint getNearestPoint(Note note, String currentSeasonID, boolean isForAllSeason) {
         float nearestDistance = Float.MAX_VALUE;
-        float[] nearestPoint = new float[]{0.0f,0.0f};
+        float[] nearestPoint = new float[] { 0.0f, 0.0f };
         FieldPoint point = new FieldPoint();
-        for(ArrayList<FieldReaderResponse> readerResponses : fieldResponses){
-            for(FieldReaderResponse fieldResponse : readerResponses){
-                if(Integer.toString(fieldResponse.getSeasonID()).equals(currentSeasonID)){
-                    for(Field field : fieldResponse.getData().getRows()){
-                            for(float[] fieldPoint : field.getRealCoordinates()){
-                                float currentDist = getDistance(fieldPoint, note.getPoint().getCoordinates());
-                                if(nearestDistance > currentDist){
-                                    nearestDistance = currentDist;
-                                    nearestPoint = fieldPoint;
-                                    point.setField(field);
-                                    point.setPoint(nearestPoint);
-                                    note.setSeason_id(field.getSeasonID());
-                                }
-                            } 
+        for (ArrayList<FieldReaderResponse> readerResponses : fieldResponses) {
+            for (FieldReaderResponse fieldResponse : readerResponses) {
+                if (isForAllSeason) {
+                    for (Field field : fieldResponse.getData().getRows()) {
+                        for (float[] fieldPoint : field.getRealCoordinates()) {
+                            float currentDist = getDistance(fieldPoint, note.getPoint().getCoordinates());
+                            if (nearestDistance > currentDist) {
+                                nearestDistance = currentDist;
+                                nearestPoint = fieldPoint;
+                                point.setField(field);
+                                point.setPoint(nearestPoint);
+                                note.setSeason_id(field.getSeasonID());
+                            }
+                        }
+                    }
+                }
+                if (Integer.toString(fieldResponse.getSeasonID()).equals(currentSeasonID)) {
+                    for (Field field : fieldResponse.getData().getRows()) {
+                        for (float[] fieldPoint : field.getRealCoordinates()) {
+                            float currentDist = getDistance(fieldPoint, note.getPoint().getCoordinates());
+                            if (nearestDistance > currentDist) {
+                                nearestDistance = currentDist;
+                                nearestPoint = fieldPoint;
+                                point.setField(field);
+                                point.setPoint(nearestPoint);
+                                note.setSeason_id(field.getSeasonID());
+                            }
+                        }
                     }
                 }
             }
@@ -82,19 +87,20 @@ public class FieldGuesserController {
         return point;
     }
 
-    private float getDistance(float[] pointOne, float[] pointTwo){
-        return (float) Math.sqrt(Math.pow(pointTwo[0]-pointOne[0], 2) + Math.pow(pointTwo[1]-pointOne[1], 2));
+    private float getDistance(float[] pointOne, float[] pointTwo) {
+        return (float) Math.sqrt(Math.pow(pointTwo[0] - pointOne[0], 2) + Math.pow(pointTwo[1] - pointOne[1], 2));
     }
 
     // public void filterNoteBySeason(String seasonId){
 
     // }
 
-    private class FieldPoint{
+    private class FieldPoint {
         private Field field;
         private float[] point;
 
-        public FieldPoint(){}
+        public FieldPoint() {
+        }
 
         public Field getField() {
             return field;
@@ -110,7 +116,7 @@ public class FieldGuesserController {
 
         public void setPoint(float[] point) {
             this.point = point;
-        } 
+        }
     }
 
 }

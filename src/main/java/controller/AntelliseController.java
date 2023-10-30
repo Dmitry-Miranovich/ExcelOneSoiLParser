@@ -3,17 +3,13 @@ package controller;
 import java.io.File;
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import constants.KmlEnum;
 import constants.Warnings;
 import eventHandlers.SingleItemEventHandler;
-import exceptions.MissingDateException;
 import exceptions.MissingFilePathException;
 import exceptions.SeasonsException;
 import javafx.beans.property.BooleanProperty;
@@ -22,8 +18,9 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -32,7 +29,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
-import models.Crops;
 import models.Field;
 import models.FieldReaderResponse;
 import models.FieldsData;
@@ -46,11 +42,11 @@ import modules.ListViewState;
 
 public class AntelliseController implements Initializable {
 
-    private GregorianCalendar startDate;
+    // private GregorianCalendar startDate;
     private String filePath;
     private MainController mainController = new MainController();
-    private boolean isSeasonListOpened = false;
-    private HashMap<Integer, String> selectedSeasonItems = new HashMap<>();
+    // private boolean isSeasonListOpened = false;
+    // private HashMap<Integer, String> selectedSeasonItems = new HashMap<>();
     private String fileExtention;
     public static Stage stage;
     public static boolean isAllSeasonSelected = false;
@@ -200,6 +196,8 @@ public class AntelliseController implements Initializable {
             mainController.showWarningMessage(filePathException.getMessage());
         }
     }
+
+    
 
     private HashMap<String, String> getTitleMap() throws SeasonsException {
         if (MainController.seasons == null) {

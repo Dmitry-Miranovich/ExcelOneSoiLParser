@@ -1,85 +1,104 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.example</groupId>
-  <artifactId>SeasonFieldParser</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <name>SeasonFieldParser</name>
-  <url>http://maven.apache.org</url>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.example</groupId>
+    <artifactId>SeasonFieldParser</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>SeasonFieldParser</name>
+    <url>http://maven.apache.org</url>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>
-        20.0.2
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>
+            20.0.2
         </maven.compiler.source>
         <maven.compiler.target>
-        20.0.2
+            20.0.2
         </maven.compiler.target>
-  </properties>
-  <dependencies>
-     <dependency>
-        <groupId>org.apache.poi</groupId>
-        <artifactId>poi-ooxml</artifactId>
-        <version>5.2.0</version> <!-- Use the latest version -->
-    </dependency>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.0</version> <!-- Use the latest version -->
+        </dependency>
 
-    <dependency>
-    <groupId>com.fasterxml.jackson.core</groupId>
-    <artifactId>jackson-databind</artifactId>
-    <version>2.15.2</version> <!-- Use the latest version -->
-</dependency>
-<dependency>
-<groupId>org.openjfx</groupId>
-        <artifactId>javafx-base</artifactId>
-        <version>17.0.6</version>
-        
-    </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.15.2</version> <!-- Use the latest version -->
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-base</artifactId>
+            <version>17.0.6</version>
+        </dependency>
 
-    <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-controls</artifactId>
-        <version>17.0.6</version>
-        <!-- <scope>system</scope>
-        <systemPath>C:\Program Files\Java\javafx-sdk-20.0.2\lib\javafx.controls.jar</systemPath> -->
-    </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>17.0.6</version>
+        </dependency>
 
-    <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-fxml</artifactId>
-        <version>17.0.6</version>
-        <!-- <scope>system</scope>
-        <systemPath>C:\Program Files\Java\javafx-sdk-20.0.2\lib\javafx.fxml.jar</systemPath> -->
-    </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>17.0.6</version>
+        </dependency>
 
-    <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-graphics</artifactId>
-        <version>17.0.6</version>
-        <!-- <scope>system</scope>
-        <systemPath>C:\Program Files\Java\javafx-sdk-20.0.2\lib\javafx.graphics.jar</systemPath> -->
-    </dependency>
-  </dependencies>
-  <build>
-    <finalName>SeasonFieldParser</finalName>
-      <plugins>
-        
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.11.0</version>
-            <configuration>
-                <source>20</source>
-                <target>20</target>
-            </configuration>
-        </plugin>
-        <plugin>
-                 <groupId>org.openjfx</groupId>
-                 <artifactId>javafx-maven-plugin</artifactId>
-                 <version>0.0.8</version>
-                 <configuration>
-                     <mainClass>com.manhpd.App</mainClass>
-                 </configuration>
-             </plugin>
-      </plugins>
-  </build>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>17.0.6</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <finalName>SeasonFieldParser</finalName>
+        <plugins>
+
+            <!-- <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>SuperMain</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin> -->
+
+            <!-- <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.Manifest">
+                                    <mainClass>SuperMain</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin> -->
+            <!-- <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.8</version>
+                <configuration>
+                    <mainClass>com.manhpd.App</mainClass>
+                </configuration>
+            </plugin> -->
+        </plugins>
+    </build>
 </project>

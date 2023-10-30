@@ -24,12 +24,8 @@ public class Main extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/seasonFieldParser.fxml"));
             Parent root = loader.load();
             InputStream fontStream = getClass().getResourceAsStream("/fonts/Akrobat-Regular.ttf");
-<<<<<<< HEAD
-            Font font = Font.loadFont(fontStream, 24);
-=======
             Font.loadFont(fontStream, 24);
 
->>>>>>> 62a7d6747b055a6ac0de4d2acf0d98e99637389a
             root.getStylesheets().addAll("/resources/css/one_soil_style.css", "/resources/css/antellis_style.css");
             MainController.stage = primaryStage;
             

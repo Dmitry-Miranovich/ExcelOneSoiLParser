@@ -1,0 +1,59 @@
+.antellis-box{
+    -fx-padding: 10px;
+}
+.antellise-generate-button{
+    -fx-pref-width: 135px;
+    -fx-pref-height: 20px;
+}
+.date-picker-container{
+    -fx-padding: 5px;
+    /* -fx-background-color: yellow; */
+    -fx-spacing: 10px;
+}
+
+.antellise-season-button{
+    -fx-pref-width: 125px
+}
+
+.antellise-main-pane{
+    -fx-pref-height: 350px;
+}
+
+.date-container{
+    /* -fx-pref-height: 100px; */
+}
+.antellise-start-date{
+    
+}
+.antellise-end-date{
+    
+}
+.antellise-generate-button-container{
+    -fx-padding: 15px 0 0 5px;
+}
+.antellise-file-path-container{
+    -fx-pref-height: 50px;
+    -fx-alignment: "CENTER-LEFT";
+    -fx-padding: 10px 0 0 5px;
+    -fx-spacing: 10px;
+}
+.antellise-file-path-button{
+    -fx-pref-width: 125px;
+}
+.antellise-file-path-textField{
+    -fx-pref-width: 235px;
+}
+.antellise-progress-bar-container{
+    -fx-pref-height: 390px;
+    -fx-alignment: "BOTTOM-LEFT";
+}
+.antellise-progress-bar-label{
+    -fx-pref-height: 50px;
+}
+.antellise-progress-bar{
+    -fx-pref-width: 600px;
+}
+.antellise-season-list{
+    -fx-pref-height: 130px;
+    -fx-pref-width: 160px;
+}

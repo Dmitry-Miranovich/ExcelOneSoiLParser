@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 public class FieldDataModule {
     private String token = "";
     private String email = "";
+    private final int REQUEST_TIMEOUT_VALUE = 10000;
     private ExcelWriterModule excelBook;
 
     public FieldDataModule() {
@@ -90,7 +91,7 @@ public class FieldDataModule {
             HttpsURLConnection secondConnection = (HttpsURLConnection) fieldURL.openConnection();
             secondConnection.setRequestMethod("GET");
             secondConnection.setRequestProperty("Authorization", formattedToken);
-            secondConnection.setConnectTimeout(10000);
+            secondConnection.setConnectTimeout(REQUEST_TIMEOUT_VALUE);
             int responseCode = secondConnection.getResponseCode();
             if (responseCode == HttpsURLConnection.HTTP_OK) {
                 BufferedReader fieldReader = new BufferedReader(new InputStreamReader(
@@ -103,7 +104,7 @@ public class FieldDataModule {
                 }
                 responses.add(response);
             } else {
-                System.out.println(secondConnection.getResponseCode());
+                alert("Запрос обработался с полученем полей", responseCode);
             }
             secondConnection.disconnect();
         } catch (Exception ex) {
@@ -129,7 +130,7 @@ public class FieldDataModule {
             URI seasonsURI = new URI(url);
             URL seasonURL = seasonsURI.toURL();
             HttpsURLConnection connection = (HttpsURLConnection) seasonURL.openConnection();
-            connection.setReadTimeout(1000);
+            connection.setReadTimeout(REQUEST_TIMEOUT_VALUE);
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Authorization", formattedToken);
             int responseCode = connection.getResponseCode();
@@ -139,8 +140,9 @@ public class FieldDataModule {
                 String seasonJSON = reader.readLine();
                 response = mapper.readValue(seasonJSON, SeasonResponse.class);
             }else{
-                System.out.println("someshi");
+                alert("Запрос обработался с полученем сезонов", responseCode);
             }
+            connection.disconnect();
         } catch (IOException ex) {
             controller.showWarningMessage("Не удалось подключится к серверам OneSoil");
         } catch (URISyntaxException ex2) {
@@ -157,8 +159,10 @@ public class FieldDataModule {
             URL noteURL = noteURI.toURL();
             HttpsURLConnection connection = (HttpsURLConnection) noteURL.openConnection();
             connection.setRequestMethod("GET");
+            connection.setReadTimeout(REQUEST_TIMEOUT_VALUE);
             connection.setRequestProperty("Authorization", formattedToken);
-            if (connection.getResponseCode() == HttpsURLConnection.HTTP_OK) {
+            int responceCode = connection.getResponseCode();
+            if (responceCode == HttpsURLConnection.HTTP_OK) {
                 ObjectMapper mapper = new ObjectMapper();
                 BufferedReader reader = new BufferedReader(
                         new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
@@ -166,7 +170,10 @@ public class FieldDataModule {
                 response = mapper.readValue(noteJSON, NoteResponse.class);
                 Note[] notes = filterNotes(response);
                 response.setData(notes);
+            }else{
+                alert("Запрос обработался с получением заметок", responceCode);
             }
+            connection.disconnect();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         } catch (URISyntaxException ex2) {
@@ -208,10 +215,6 @@ public class FieldDataModule {
             }
         }
         return notes.toArray(new Note[notes.size()]);
-    }
-
-    private void setFieldData(Note note){
-        
     }
 
     private void convertMultidimensionalArray(FieldReaderResponse response) {
@@ -256,4 +259,7 @@ public class FieldDataModule {
         this.email = email;
     }
 
+    private void alert(String text, int responseCode){
+        System.out.println(String.format("%s, с кодом %d", text, responseCode));
+    }
 }

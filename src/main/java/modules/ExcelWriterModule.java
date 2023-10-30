@@ -124,12 +124,16 @@ public class ExcelWriterModule {
             Cell updatedAtCell = sheetRow.createCell(ExcelHeaders.SHEET_UPDATED_AT_INDEX);
             Cell seasonIDCell = sheetRow.createCell(ExcelHeaders.SHEET_SEASON_ID_INDEX);
             IDCell.setCellValue(row.getId());
-            String[] spittedTitle = row.getTitle().split("\\s");
-            if(row.getTitle().charAt(0)!= '№' || spittedTitle.length <= 1){
+            String[] spittedTitle = sliceStringInTwo(row.getTitle(), ' ');
+            if(spittedTitle == null){
+                numberFieldCell.setCellValue(row.getTitle());
+            }else{
+                if(spittedTitle.length == 1){
                 numberFieldCell.setCellValue(row.getTitle());
             }else{
                 numberFieldCell.setCellValue(spittedTitle[0]);    
                 fieldNameCell.setCellValue(spittedTitle[1]);
+            }
             }
             areaCell.setCellValue(row.getArea());
             cropCell.setCellValue((row.getCrops().length > 0)?row.getCrops()[0].getCrop():"");
@@ -192,15 +196,6 @@ public class ExcelWriterModule {
         }
     }
 
-    private void createSeasonHeader(Sheet sheet, FieldReaderResponse response){
-        String season = response.getSeasonName();
-        Row row = sheet.createRow(useRow());
-        Cell seasonIntro = row.createCell(0);
-        Cell seasonData = row.createCell(1);
-        seasonIntro.setCellValue("Текущий сезон: ");
-        seasonData.setCellValue(season);
-    }
-
     private void autosizeColumns(Sheet sheet){
         for(int i = 0; i< ExcelHeaders.ONESOIL_FIELDS_OUTPUT.length(); i++){
             sheet.autoSizeColumn(i);
@@ -235,5 +230,19 @@ public class ExcelWriterModule {
 
     public void setBook(Workbook book) {
         this.book = book;
+    }
+    private String[] sliceStringInTwo(String text, char border){
+        if(text.charAt(0) == '№'){
+            return new String[]{text};
+        }
+        int firstPartIndex = 0;
+        for(int i = 0; i< text.length(); i++){
+            char symbol = text.charAt(i);
+            if(symbol == border){
+                firstPartIndex = i;
+                break;
+            }
+        }
+        return (firstPartIndex != 0)? new String[]{text.substring(0, firstPartIndex), text.substring(firstPartIndex, text.length())}: null;
     }
 }

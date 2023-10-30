@@ -29,9 +29,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
@@ -39,6 +41,8 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.skin.ListViewSkin;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -99,6 +103,9 @@ public class MainController implements Initializable {
     private Button customButton;
     @FXML
     private TextField filePathTextField;
+    @FXML
+    private Label emailSettingsButton;
+
 
     @FXML
     public ToggleButton oneSoilButton;
@@ -146,6 +153,20 @@ public class MainController implements Initializable {
         prevBox = oneSoilBox;
         filePathTextField.setEditable(false);
         oneSoilSeasonButtonsBox.getStyleClass().add("onesoil-season-button-box");
+        try{
+            String url = "D:\\Miranovich Dmitry\\JavaProjects\\SeasonFieldParser\\src\\main\\java\\resources\\pictures\\settings-icon.png";
+        Image icon = new Image(url);
+        ImageView settingsIcon = new ImageView(icon);
+        settingsIcon.setFitHeight(20);
+        settingsIcon.setFitWidth(20);
+        emailSettingsButton.setGraphic(settingsIcon);
+        ContextMenu menu = new ContextMenu();
+        menu.getItems().add(new MenuItem("some shit"));
+        // emailSettingsButton.setOnAction
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        // ImageView settingsIcon = new ImageView(new Image(""));
     }
 
     @FXML
@@ -174,7 +195,7 @@ public class MainController implements Initializable {
 
     private void noteCheckBoxAction(CheckBox currBox) {
         if (currBox.isSelected()) {
-            ToggleButton noteSeasons = new ToggleButton("Выбрать целевой сезон");
+            Button noteSeasons = new Button("Выбрать целевой сезон");
             noteSeasons.getStyleClass().add("note-season-button");
             noteSeasons.setOnMouseClicked(event -> {
                 // ToggleButton currButton = (ToggleButton) event.getSource();
@@ -203,20 +224,24 @@ public class MainController implements Initializable {
         AuthModule authModule = new AuthModule();
         token = authModule.getToken(selectedEmail);
         isSeasonListOpened = false;
-        if (seasonPane != null) {
-            oneSoilBox.getChildren().remove(seasonPane);
+        if(seasonListState.getCurrPane() != null){
+            listViewBox.getChildren().remove(seasonListState.getCurrPane());
+            seasonListState.setIsListOpened(false);
+        }
+        if(noteSeasonListState.getCurrPane() != null){
+            listViewBox.getChildren().remove(noteSeasonListState.getCurrPane());
+            noteSeasonListState.setIsListOpened(false);
+            
         }
         if (token != Tokens.ALL_TOKENS) {
             FieldDataModule module = new FieldDataModule(token);
             seasons = module.getSeasonResponse(AuthModule.SEASON_URL, token);
             seasonsButton.setDisable(false);
-            // AntelliseController.antelliseSeasonButton.setDisable(false);
             AntelliseController.isAllSeasonSelected = false;
 
         } else {
             isAllSeasonsApplied = true;
             seasonsButton.setDisable(true);
-            // AntelliseController.antelliseSeasonButton.setDisable(true);
             AntelliseController.isAllSeasonSelected = true;
         }
 
@@ -399,7 +424,7 @@ public class MainController implements Initializable {
                 }
             }
             FieldGuesserController fieldGuesserController = new FieldGuesserController(noteResponses, fieldResponses);
-            fieldGuesserController.appendNearestFieldByNote(noteSeasonListState.getCurrentNote());
+            fieldGuesserController.appendNearestFieldByNote(noteSeasonListState.getCurrentNote(), true);
             writeExcelData(writerModule, seasonResponses, fieldResponses, noteResponses);
         } catch (InterruptedException intException) {
             showWarningMessage(intException.getMessage());
@@ -449,7 +474,7 @@ public class MainController implements Initializable {
         }
         FieldGuesserController fieldGuesserController = new FieldGuesserController(noteResponseList,
                 fieldResponsesList);
-        fieldGuesserController.appendNearestFieldByNote(noteSeasonListState.getCurrentNote());
+        fieldGuesserController.appendNearestFieldByNote(noteSeasonListState.getCurrentNote(), false);
         writeExcelData(writerModule, seasonsResponsesList, fieldResponsesList, noteResponseList);
     }
 
@@ -482,5 +507,7 @@ public class MainController implements Initializable {
     public Stage getStage() {
         return stage;
     }
+
+
 
 }
