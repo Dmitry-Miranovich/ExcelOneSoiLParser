@@ -154,7 +154,7 @@ public class MainController implements Initializable {
         filePathTextField.setEditable(false);
         oneSoilSeasonButtonsBox.getStyleClass().add("onesoil-season-button-box");
         try{
-            String url = "D:\\Miranovich Dmitry\\JavaProjects\\SeasonFieldParser\\src\\main\\java\\resources\\pictures\\settings-icon.png";
+            String url = "/resources/pictures/settings-icon.png";
         Image icon = new Image(url);
         ImageView settingsIcon = new ImageView(icon);
         settingsIcon.setFitHeight(20);
